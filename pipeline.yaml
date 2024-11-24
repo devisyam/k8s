@@ -18,7 +18,7 @@ pipelines:
     environment_variables:
       ENV: preprod
       PLATFORM: kubernetes # Updated platform to Kubernetes
-      KUBECONFIG_PATH: admin.conf # Ensure this is mounted or set up correctly
+      KUBECONFIG_PATH: k8s/admin.conf # Ensure this is mounted or set up correctly
       NAMESPACE: demo # Change namespace
       REPO_NAME: lams
     materials:
