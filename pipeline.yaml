@@ -1,0 +1,46 @@
+format_version: 10
+common:
+  deploy_tasks: &deploy_tasks
+    - exec:
+        arguments:
+          - -c
+          - kubectl apply -f deployment/
+        command: /bin/bash
+        working_directory: pulse-uat-deployment # Change to repo name of Git
+        run_if: passed
+
+pipelines:
+  demo: # Change pipeline name
+    group: devisyam
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: -1
+    environment_variables:
+      ENV: preprod
+      PLATFORM: kubernetes # Updated platform to Kubernetes
+      KUBECONFIG_PATH: admin.conf # Ensure this is mounted or set up correctly
+      NAMESPACE: demo # Change namespace
+      REPO_NAME: lams
+    materials:
+      k8s:  # Change to repo name of Git
+        git: https://github.com/devisyam/k8s.git
+        username: devisyam
+        shallow_clone: false
+        auto_update: true
+        branch: master
+        encrypted_password: RGV2aXN5YW1AMQ==
+        name: k8s # Change to repo name of Git
+        destination: k8s # Change to repo name of Git
+    stages:
+      - deploy-pulse: # Deploy stage name change
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: false
+          approval:
+            type: manual
+            allow_only_on_success: false
+          jobs:
+            deploy-pulse: # Deploy job name change
+              timeout: 30
+              elastic_profile_id: gocd-agent-docker-dind
+              tasks: *deploy_tasks
