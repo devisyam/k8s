@@ -4,7 +4,7 @@ common:
     - exec:
         arguments:
           - -c
-          - kubectl apply -f deployment/
+          - kubectl apply -f resources/
         command: /bin/bash
         working_directory: pulse-uat-deployment # Change to repo name of Git
         run_if: passed
